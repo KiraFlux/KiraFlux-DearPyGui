@@ -7,13 +7,9 @@ from typing import final
 from dearpygui import dearpygui as dpg
 
 from kf_dpg.core.dpg.item import DpgTag
-from kf_dpg.core.dpg.traits import DpgIntervaled
-from kf_dpg.core.dpg.traits import DpgLabeled
-from kf_dpg.core.dpg.traits import DpgSizable
-from kf_dpg.core.dpg.traits import DpgValueHandlerable
-from kf_dpg.core.dpg.traits import DpgWidthAdjustable
+from kf_dpg.core.dpg.traits import DpgIntervaled, DpgLabeled, DpgSizable, DpgValueHandlerable, DpgWidthAdjustable
 from kf_dpg.core.dpg.widget import DpgWidget
-from rs.misc.color import Color
+from kf_dpg.misc.color import Color
 
 
 @final

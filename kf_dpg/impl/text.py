@@ -6,10 +6,9 @@ from typing import final
 from dearpygui import dearpygui as dpg
 
 from kf_dpg.core.dpg.item import DpgTag
-from kf_dpg.core.dpg.traits import DpgColored
-from kf_dpg.core.dpg.traits import DpgValued
+from kf_dpg.core.dpg.traits import DpgColored, DpgValued
 from kf_dpg.core.dpg.widget import DpgWidget
-from rs.misc.color import Color
+from kf_dpg.misc.color import Color
 
 
 @final

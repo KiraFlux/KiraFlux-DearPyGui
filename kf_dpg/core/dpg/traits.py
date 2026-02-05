@@ -1,31 +1,15 @@
 from __future__ import annotations
 
-from abc import ABC
-from abc import abstractmethod
-from dataclasses import dataclass
-from dataclasses import field
-from typing import Any
-from typing import Callable
-from typing import ClassVar
-from typing import Optional
-from typing import final
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from typing import Any, Callable, ClassVar, Optional, final
 
 from dearpygui import dearpygui as dpg
 
-from kf_dpg.abc.traits import Colored
-from kf_dpg.abc.traits import Deletable
-from kf_dpg.abc.traits import Handlerable
-from kf_dpg.abc.traits import HeightAdjustable
-from kf_dpg.abc.traits import Intervaled
-from kf_dpg.abc.traits import Labeled
-from kf_dpg.abc.traits import Sizable
-from kf_dpg.abc.traits import Toggleable
-from kf_dpg.abc.traits import Valued
-from kf_dpg.abc.traits import Visibility
-from kf_dpg.abc.traits import WidthAdjustable
+from kf_dpg.abc.traits import Colored, Deletable, Handlerable, HeightAdjustable, Intervaled, Labeled, Sizable, Toggleable, Valued, Visibility, WidthAdjustable
 from kf_dpg.core.dpg.item import DpgItem
-from rs.misc.color import Color
-from rs.misc.subject import Subject
+from kf_dpg.misc.color import Color
+from kf_dpg.misc.subject import Subject
 
 
 @dataclass(kw_only=True)

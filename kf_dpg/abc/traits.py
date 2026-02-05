@@ -1,15 +1,10 @@
 from __future__ import annotations
 
-from abc import ABC
-from abc import abstractmethod
-from typing import Any
-from typing import Callable
-from typing import Optional
-from typing import Self
-from typing import final
+from abc import ABC, abstractmethod
+from typing import Any, Callable, Optional, Self, final
 
-from rs.lina.vector import Vector2D
-from rs.misc.color import Color
+from kf_dpg.misc.color import Color
+from kf_dpg.misc.vector import Vector2D
 
 
 class Colored(ABC):

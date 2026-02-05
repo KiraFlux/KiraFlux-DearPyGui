@@ -1,25 +1,15 @@
 from __future__ import annotations
 
 from abc import ABC
-from dataclasses import dataclass
-from dataclasses import field
-from typing import Callable
-from typing import ClassVar
-from typing import Iterable
-from typing import MutableSequence
-from typing import Optional
-from typing import final
+from dataclasses import dataclass, field
+from typing import Callable, ClassVar, Iterable, MutableSequence, Optional, final
 
 from dearpygui import dearpygui as dpg
 
 from kf_dpg.abc.entities import Widget
 from kf_dpg.core.dpg.container import DpgContainer
 from kf_dpg.core.dpg.item import DpgTag
-from kf_dpg.core.dpg.traits import DpgLabeled
-from kf_dpg.core.dpg.traits import DpgSizable
-from kf_dpg.core.dpg.traits import DpgToggleable
-from kf_dpg.core.dpg.traits import DpgValueHandlerable
-from kf_dpg.core.dpg.traits import DpgWidthAdjustable
+from kf_dpg.core.dpg.traits import DpgLabeled, DpgSizable, DpgToggleable, DpgValueHandlerable, DpgWidthAdjustable
 from kf_dpg.core.dpg.widget import DpgWidget
 
 
@@ -218,16 +208,12 @@ class Window(_DpgWidgetContainer, DpgSizable[int], DpgLabeled):
 class ChildWindow(_DpgWidgetContainer, DpgSizable[int]):
     """Дочернее очно"""
 
-    resizable_x: bool = False
-    resizable_y: bool = False
-
     auto_size_x: bool = False
     auto_size_y: bool = False
 
     border: bool = True
 
     # Внешний вид
-    background: bool = False
     menu_bar: bool = False
     scrollable_y: bool = False
     scrollable_x: bool = False
@@ -236,10 +222,7 @@ class ChildWindow(_DpgWidgetContainer, DpgSizable[int]):
         return dpg.add_child_window(
             parent=parent_tag,
             border=self.border,
-            frame_style=self.background,
             menubar=self.menu_bar,
-            resizable_x=self.resizable_x,
-            resizable_y=self.resizable_y,
             no_scrollbar=not self.scrollable_y,
             horizontal_scrollbar=self.scrollable_x,
             autosize_x=self.auto_size_x,
