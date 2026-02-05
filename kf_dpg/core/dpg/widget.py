@@ -22,25 +22,25 @@ class DpgWidget(Widget[DpgTag], DpgDeletable, DpgVisibility, ABC):
     __font: Optional[Font] = field(init=False, default=None)
     """Шрифт"""
 
-    def _onRegister(self, tag: DpgTag) -> None:
-        super()._onRegister(tag)
+    def _on_register(self, tag: DpgTag) -> None:
+        super()._on_register(tag)
         self._updateVisibility()
 
         if self.__font is not None:
-            self._updateFont()
+            self._update_font()
 
     @final
-    def setFont(self, font: Font[DpgTag]) -> None:
+    def set_font(self, font: Font[DpgTag]) -> None:
         self.__font = font
 
-        if self.isRegistered():
-            self._updateFont()
+        if self.is_registered():
+            self._update_font()
 
-    def _updateFont(self):
+    def _update_font(self):
         if self.__font:
             dpg.bind_item_font(self.tag(), self.__font.tag())
 
     @final
     def register(self, parent: Widget[DpgTag]) -> None:
         """Зарегистрировать виджет"""
-        self._onRegister(self._createTag(parent.tag()))
+        self._on_register(self._create_tag(parent.tag()))

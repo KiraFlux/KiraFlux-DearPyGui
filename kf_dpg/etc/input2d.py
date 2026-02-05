@@ -29,10 +29,10 @@ class IntInput2D(CustomWidget, Valued[Vector2D[int]], Intervaled[int]):
             _on_change_y = None
         else:
             def _on_change_x(x):
-                on_change(Vector2D(x, self._y.getValue()))
+                on_change(Vector2D(x, self._y.get_value()))
 
             def _on_change_y(y):
-                on_change(Vector2D(self._x.getValue(), y))
+                on_change(Vector2D(self._x.get_value(), y))
 
         interval_min, interval_max = interval
 
@@ -44,7 +44,7 @@ class IntInput2D(CustomWidget, Valued[Vector2D[int]], Intervaled[int]):
             step_fast=step_fast,
             interval_max=interval_max,
             interval_min=interval_min,
-        ).withWidth(item_width).withHandler(_on_change_y)
+        ).with_width(item_width).with_handler(_on_change_y)
 
         self._x = IntInput(
             default=default.x,
@@ -52,7 +52,7 @@ class IntInput2D(CustomWidget, Valued[Vector2D[int]], Intervaled[int]):
             step_fast=step_fast,
             interval_max=interval_max,
             interval_min=interval_min,
-        ).withWidth(item_width).withHandler(_on_change_x)
+        ).with_width(item_width).with_handler(_on_change_x)
 
         base = (
             HBox()
@@ -66,29 +66,29 @@ class IntInput2D(CustomWidget, Valued[Vector2D[int]], Intervaled[int]):
 
         super().__init__(base)
 
-    def getIntervalMax(self) -> int:
-        return self._x.getIntervalMax()
+    def get_interval_max(self) -> int:
+        return self._x.get_interval_max()
 
-    def getIntervalMin(self) -> int:
-        return self._x.getIntervalMin()
+    def get_interval_min(self) -> int:
+        return self._x.get_interval_min()
 
-    def setIntervalMax(self, new_max: int) -> None:
-        self._x.setIntervalMax(new_max)
-        self._y.setIntervalMax(new_max)
+    def set_interval_max(self, new_max: int) -> None:
+        self._x.set_interval_max(new_max)
+        self._y.set_interval_max(new_max)
 
-    def setIntervalMin(self, new_min: int) -> None:
-        self._x.setIntervalMin(new_min)
-        self._y.setIntervalMin(new_min)
+    def set_interval_min(self, new_min: int) -> None:
+        self._x.set_interval_min(new_min)
+        self._y.set_interval_min(new_min)
 
-    def setValue(self, value: Vector2D[int]) -> None:
-        self._x.setValue(value.x)
-        self._y.setValue(value.y)
+    def set_value(self, value: Vector2D[int]) -> None:
+        self._x.set_value(value.x)
+        self._y.set_value(value.y)
         self._on_change(value)
 
-    def getValue(self) -> Vector2D[int]:
+    def get_value(self) -> Vector2D[int]:
         return Vector2D(
-            self._x.getValue(),
-            self._y.getValue()
+            self._x.get_value(),
+            self._y.get_value()
         )
 
 
@@ -113,10 +113,10 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
             _on_change_y = None
         else:
             def _on_change_x(x):
-                on_change(Vector2D(x, self._y.getValue()))
+                on_change(Vector2D(x, self._y.get_value()))
 
             def _on_change_y(y):
-                on_change(Vector2D(self._x.getValue(), y))
+                on_change(Vector2D(self._x.get_value(), y))
 
         interval_min, interval_max = interval
 
@@ -128,7 +128,7 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
             step_fast=step_fast,
             interval_max=interval_max,
             interval_min=interval_min,
-        ).withWidth(item_width).withHandler(_on_change_y)
+        ).with_width(item_width).with_handler(_on_change_y)
 
         self._x = FloatInput(
             default=default.x,
@@ -136,7 +136,7 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
             step_fast=step_fast,
             interval_max=interval_max,
             interval_min=interval_min,
-        ).withWidth(item_width).withHandler(_on_change_x)
+        ).with_width(item_width).with_handler(_on_change_x)
 
         super().__init__(
             HBox()
@@ -148,27 +148,27 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
             .add(Text(label))
         )
 
-    def getIntervalMax(self) -> float:
-        return self._x.getIntervalMax()
+    def get_interval_max(self) -> float:
+        return self._x.get_interval_max()
 
-    def getIntervalMin(self) -> float:
-        return self._x.getIntervalMin()
+    def get_interval_min(self) -> float:
+        return self._x.get_interval_min()
 
-    def setIntervalMax(self, new_max: float) -> None:
-        self._x.setIntervalMax(new_max)
-        self._y.setIntervalMax(new_max)
+    def set_interval_max(self, new_max: float) -> None:
+        self._x.set_interval_max(new_max)
+        self._y.set_interval_max(new_max)
 
-    def setIntervalMin(self, new_min: float) -> None:
-        self._x.setIntervalMin(new_min)
-        self._y.setIntervalMin(new_min)
+    def set_interval_min(self, new_min: float) -> None:
+        self._x.set_interval_min(new_min)
+        self._y.set_interval_min(new_min)
 
-    def setValue(self, value: Vector2D[float]) -> None:
-        self._x.setValue(value.x)
-        self._y.setValue(value.y)
+    def set_value(self, value: Vector2D[float]) -> None:
+        self._x.set_value(value.x)
+        self._y.set_value(value.y)
         self._on_change(value)
 
-    def getValue(self) -> Vector2D[float]:
+    def get_value(self) -> Vector2D[float]:
         return Vector2D(
-            self._x.getValue(),
-            self._y.getValue()
+            self._x.get_value(),
+            self._y.get_value()
         )

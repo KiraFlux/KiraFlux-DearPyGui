@@ -1,7 +1,6 @@
 import colorsys
 from dataclasses import dataclass
-from typing import ClassVar
-from typing import Self
+from typing import ClassVar, Self
 
 
 @dataclass(frozen=True)
@@ -40,12 +39,12 @@ class Color:
     @classmethod
     def white(cls) -> Self:
         """Белый"""
-        return cls.fromHex('#ffffff')
+        return cls.from_hex('#ffffff')
 
     @classmethod
     def black(cls) -> Self:
         """Черный"""
-        return cls.fromHex("#000000")
+        return cls.from_hex("#000000")
 
     @classmethod
     def gray(cls, grayness: float) -> Self:
@@ -58,49 +57,49 @@ class Color:
     # discord
 
     @classmethod
-    def grey(cls) -> Self:
+    def discord_gray(cls) -> Self:
         """Discord Grey"""
-        return cls.fromHex("#99AAB5")
+        return cls.from_hex("#99AAB5")
 
     @classmethod
-    def nitro(cls) -> Self:
+    def discord_nitro(cls) -> Self:
         """Discord Nitro"""
-        return cls.fromHex("#FF73FA")
+        return cls.from_hex("#FF73FA")
 
     @classmethod
-    def online(cls) -> Self:
+    def discord_online(cls) -> Self:
         """Discord Online"""
-        return cls.fromHex("#43B581")
+        return cls.from_hex("#43B581")
 
     @classmethod
-    def primary(cls) -> Self:
+    def discord_primary(cls) -> Self:
         """Discord Primary Button (Blurple)"""
-        return cls.fromHex("#5865F2")
+        return cls.from_hex("#5865F2")
 
     @classmethod
-    def secondary(cls) -> Self:
+    def discord_secondary(cls) -> Self:
         """Discord Secondary Button (Grey)"""
-        return cls.fromHex("#4F545C")
+        return cls.from_hex("#4F545C")
 
     @classmethod
-    def success(cls) -> Self:
+    def discord_success(cls) -> Self:
         """Discord Success Button (Green)"""
-        return cls.fromHex("#57F287")
+        return cls.from_hex("#57F287")
 
     @classmethod
-    def danger(cls) -> Self:
+    def discord_danger(cls) -> Self:
         """Discord Danger Button (Red)"""
-        return cls.fromHex("#ED4245")
+        return cls.from_hex("#ED4245")
 
     @classmethod
-    def warning(cls) -> Self:
+    def discord_warning(cls) -> Self:
         """Discord Warning Button (Yellow)"""
-        return cls.fromHex("#FEE75C")
+        return cls.from_hex("#FEE75C")
 
     # from
 
     @classmethod
-    def fromHex(cls, _hex: str) -> Self:
+    def from_hex(cls, _hex: str) -> Self:
         """Создать цвет на основе HEX строки"""
         assert len(_hex) == 7
         assert _hex[0] == '#'
@@ -109,15 +108,15 @@ class Color:
         g = int(_hex[3:5], 16)
         b = int(_hex[5:7], 16)
 
-        return cls.fromRGB888(r, g, b)
+        return cls.from_rgb888(r, g, b)
 
     @classmethod
-    def fromRGB888(cls, r: int, g: int, b: int) -> Self:
+    def from_rgb888(cls, r: int, g: int, b: int) -> Self:
         """Создать из формата RGB888"""
-        return cls.fromRGBA8888(r, g, b, cls._rgba_8888_max)
+        return cls.from_rgba8888(r, g, b, cls._rgba_8888_max)
 
     @classmethod
-    def fromRGBA8888(cls, r: int, g: int, b: int, a: int) -> Self:
+    def from_rgba8888(cls, r: int, g: int, b: int, a: int) -> Self:
         """Создать из формата RGBA888"""
         return cls(
             r / cls._rgba_8888_max,
@@ -127,7 +126,7 @@ class Color:
         )
 
     @classmethod
-    def fromHSL(cls, hue: float, saturation: float, lightness: float) -> Self:
+    def from_hsl(cls, hue: float, saturation: float, lightness: float) -> Self:
         """Создать из формата HSL
         :param hue: от 0 до 360
         :param saturation: [0;1]
@@ -155,7 +154,7 @@ class Color:
 
     # to
 
-    def toRGB888(self) -> tuple[int, int, int]:
+    def to_rgb888(self) -> tuple[int, int, int]:
         """Преобразовать в формат RGB888"""
         return (
             int(self.red * self._rgba_8888_max),
@@ -163,7 +162,7 @@ class Color:
             int(self.blue * self._rgba_8888_max)
         )
 
-    def toRGBA8888(self) -> tuple[int, int, int, int]:
+    def to_rgba8888(self) -> tuple[int, int, int, int]:
         """Преобразовать в формат RGBA8888"""
         return (
             int(self.red * self._rgba_8888_max),
@@ -172,16 +171,16 @@ class Color:
             int(self.alpha * self._rgba_8888_max)
         )
 
-    def toHSL(self) -> tuple[float, float, float]:
+    def to_hsl(self) -> tuple[float, float, float]:
         """Преобразует цвет в формат HSL"""
         h, l, s = colorsys.rgb_to_hls(self.red, self.green, self.blue)
         return h * 360, s, l
 
     # methods
 
-    def toHex(self) -> str:
+    def to_hex(self) -> str:
         """Преобразовать в HEX представление"""
-        r, g, b = self.toRGB888()
+        r, g, b = self.to_rgb888()
         return f"#{r:02x}{g:02x}{b:02x}"
 
     def brightness(self) -> float:
@@ -193,10 +192,10 @@ class Color:
         :param k: Коэффициент затемнения [0;1]
         """
         assert 0.0 <= k <= 1.0
-        h, s, l = self.toHSL()
+        h, s, l = self.to_hsl()
         new_l = l * (1 - k)
 
-        return Color.fromHSL(h, s, new_l).withAlpha(self.alpha)
+        return Color.from_hsl(h, s, new_l).with_alpha(self.alpha)
 
     def lighter(self, k: float) -> Self:
         """Возвращает более светлый цвет.
@@ -205,10 +204,10 @@ class Color:
 
         assert 0.0 <= k <= 1.0
 
-        h, s, l = self.toHSL()
+        h, s, l = self.to_hsl()
         new_l = l + (1 - l) * k
 
-        return Color.fromHSL(h, s, new_l).withAlpha(self.alpha)
+        return Color.from_hsl(h, s, new_l).with_alpha(self.alpha)
 
     def saturated(self, k: float) -> Self:
         """Увеличивает насыщенность цвета.
@@ -217,10 +216,10 @@ class Color:
         """
         assert 0.0 <= k <= 1.0
 
-        h, s, l = self.toHSL()
+        h, s, l = self.to_hsl()
         new_s = s + (1 - s) * k
 
-        return Color.fromHSL(h, new_s, l).withAlpha(self.alpha)
+        return Color.from_hsl(h, new_s, l).with_alpha(self.alpha)
 
     def desaturated(self, k: float) -> Self:
         """Уменьшает насыщенность цвета (делает блеклым).
@@ -229,12 +228,12 @@ class Color:
         """
         assert 0.0 <= k <= 1.0
 
-        h, s, l = self.toHSL()
+        h, s, l = self.to_hsl()
         new_s = s * (1 - k)
 
-        return Color.fromHSL(h, new_s, l).withAlpha(self.alpha)
+        return Color.from_hsl(h, new_s, l).with_alpha(self.alpha)
 
-    def withAlpha(self, alpha: float) -> Self:
+    def with_alpha(self, alpha: float) -> Self:
         """Возвращает копию цвета с новой прозрачностью.
 
         :param alpha: Новое значение прозрачности [0;1]

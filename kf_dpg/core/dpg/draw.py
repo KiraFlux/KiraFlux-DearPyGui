@@ -25,7 +25,7 @@ class DpgFigure(DpgVisibility, DpgDeletable, Figure, ABC):
 
     @final
     def register(self, canvas: Canvas[DpgTag]) -> None:
-        self._onRegister(self._createTag(canvas.tag()))
+        self._on_register(self._create_tag(canvas.tag()))
 
 
 @final
@@ -36,14 +36,14 @@ class DpgCanvas(Canvas[DpgTag], DpgContainer):
     width: int
     height: int
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.add_drawlist(
             parent=parent_tag,
             width=self.width,
             height=self.height,
         )
 
-    def _registerItem(self, item: DpgFigure) -> None:
+    def _register_item(self, item: DpgFigure) -> None:
         item.register(self)
 
 
@@ -62,15 +62,15 @@ class SupportFillColor(DpgItem):
     def fill_color(self, c: Color):
         self._fill_color = c
 
-        if self.isRegistered():
-            self._updateFillColor()
+        if self.is_registered():
+            self._update_fill_color()
 
     def update(self) -> None:
         super().update()
-        self._updateFillColor()
+        self._update_fill_color()
 
-    def _updateFillColor(self) -> None:
-        self.configure(fill=self.fill_color.toRGBA8888())
+    def _update_fill_color(self) -> None:
+        self.configure(fill=self.fill_color.to_rgba8888())
 
 
 @dataclass(kw_only=True)
@@ -88,14 +88,14 @@ class SupportContourThickness(DpgItem):
     def contour_thickness(self, x):
         self._contour_thickness = x
 
-        if self.isRegistered():
-            self._updateContourThickness()
+        if self.is_registered():
+            self._update_contour_thickness()
 
     def update(self) -> None:
         super().update()
-        self._updateContourThickness()
+        self._update_contour_thickness()
 
-    def _updateContourThickness(self) -> None:
+    def _update_contour_thickness(self) -> None:
         self.configure(thickness=self.contour_thickness)
 
 
@@ -114,15 +114,15 @@ class SupportContourColor(DpgItem):
     def contour_color(self, x):
         self._contour_color = x
 
-        if self.isRegistered():
-            self._updateContourColor()
+        if self.is_registered():
+            self._update_contour_color()
 
-    def _updateContourColor(self) -> None:
-        self.configure(color=self._contour_color.toRGBA8888())
+    def _update_contour_color(self) -> None:
+        self.configure(color=self._contour_color.to_rgba8888())
 
     def update(self) -> None:
         super().update()
-        self._updateContourColor()
+        self._update_contour_color()
 
 
 @dataclass(kw_only=False)
@@ -142,8 +142,8 @@ class SupportTwoPositionsConstruct(DpgItem, ABC):
     def position_1(self, x):
         self._position_1 = x
 
-        if self.isRegistered():
-            self._updatePosition1()
+        if self.is_registered():
+            self._update_position_1()
 
     @property
     def position_2(self):
@@ -154,33 +154,33 @@ class SupportTwoPositionsConstruct(DpgItem, ABC):
     def position_2(self, x):
         self._position_2 = x
 
-        if self.isRegistered():
-            self._updatePosition2()
+        if self.is_registered():
+            self._update_position_2()
 
     @classmethod
     @abstractmethod
-    def _keyPosition1(cls) -> str:
+    def _key_position_1(cls) -> str:
         """Получить ключ kwarg конфигурации первой позиции"""
 
     @classmethod
     @abstractmethod
-    def _keyPosition2(cls) -> str:
+    def _key_position_2(cls) -> str:
         """Получить ключ kwarg конфигурации второй позиции"""
 
-    def _updatePosition1(self) -> None:
+    def _update_position_1(self) -> None:
         self.configure(**{
-            self._keyPosition1(): self.position_1.toTuple()
+            self._key_position_1(): self.position_1.toTuple()
         })
 
-    def _updatePosition2(self) -> None:
+    def _update_position_2(self) -> None:
         self.configure(**{
-            self._keyPosition2(): self.position_2.toTuple()
+            self._key_position_2(): self.position_2.toTuple()
         })
 
     def update(self) -> None:
         super().update()
-        self._updatePosition1()
-        self._updatePosition2()
+        self._update_position_1()
+        self._update_position_2()
 
 
 @final
@@ -199,17 +199,17 @@ class Rectangle(DpgFigure, SupportTwoPositionsConstruct, SupportFillColor, Suppo
     def rounding(self, x):
         self._rounding = x
 
-        if self.isRegistered():
-            self._updateRounding()
+        if self.is_registered():
+            self._update_rounding()
 
-    def _updateRounding(self) -> None:
+    def _update_rounding(self) -> None:
         self.configure(rounding=self._rounding)
 
     def update(self) -> None:
         super().update()
-        self._updateRounding()
+        self._update_rounding()
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.draw_rectangle(
             (0, 0),
             (0, 0),
@@ -217,11 +217,11 @@ class Rectangle(DpgFigure, SupportTwoPositionsConstruct, SupportFillColor, Suppo
         )
 
     @classmethod
-    def _keyPosition1(cls) -> str:
+    def _key_position_1(cls) -> str:
         return 'pmin'
 
     @classmethod
-    def _keyPosition2(cls) -> str:
+    def _key_position_2(cls) -> str:
         return 'pmax'
 
 
@@ -231,14 +231,14 @@ class Line(DpgFigure, SupportTwoPositionsConstruct, SupportFillColor, SupportCon
     """Линия"""
 
     @classmethod
-    def _keyPosition1(cls) -> str:
+    def _key_position_1(cls) -> str:
         return 'p1'
 
     @classmethod
-    def _keyPosition2(cls) -> str:
+    def _key_position_2(cls) -> str:
         return 'p2'
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.draw_line(
             (0, 0),
             (0, 0),
@@ -264,17 +264,17 @@ class Positioned(DpgItem):
     def position(self, x):
         self._position = x
 
-        if self.isRegistered():
-            self._updatePosition()
+        if self.is_registered():
+            self._update_position()
 
-    def _updatePosition(self):
+    def _update_position(self):
         self.configure(**{
             self._position_key: self.position.toTuple()
         })
 
     def update(self) -> None:
         super().update()
-        self._updatePosition()
+        self._update_position()
 
 
 @final
@@ -294,17 +294,17 @@ class Circle(DpgFigure, Positioned, SupportContourColor, SupportContourThickness
     def radius(self, x):
         self._radius = x
 
-        if self.isRegistered():
-            self._updateRadius()
+        if self.is_registered():
+            self._update_radius()
 
-    def _updateRadius(self) -> None:
+    def _update_radius(self) -> None:
         self.configure(radius=self.radius)
 
     def update(self) -> None:
         super().update()
-        self._updateRadius()
+        self._update_radius()
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.draw_circle(
             (0, 0),
             0,
@@ -341,20 +341,20 @@ class TextFigure(DpgFigure, Positioned, SupportFillColor, DpgHeightAdjustable):
     @text.setter
     def text(self, x):
         self._text = x
-        if self.isRegistered():
-            self._updateText()
+        if self.is_registered():
+            self._update_text()
 
-    def _updateText(self) -> None:
+    def _update_text(self) -> None:
         self.configure(text=self.text)
 
     def update(self) -> None:
         super().update()
-        self._updateText()
+        self._update_text()
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.draw_text(
             self.position.toTuple(),
             self.text,
             parent=parent_tag,
-            size=self.getHeight()
+            size=self.get_height()
         )

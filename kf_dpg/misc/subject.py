@@ -1,5 +1,4 @@
-from typing import Any
-from typing import Callable
+from typing import Any, Callable
 
 
 class Subject[T]:
@@ -13,10 +12,10 @@ class Subject[T]:
         for observer in self.__observers:
             observer(value)
 
-    def addListener(self, observer: Callable[[T], Any]) -> None:
+    def add_listener(self, observer: Callable[[T], Any]) -> None:
         """Добавить наблюдателя"""
         self.__observers.add(observer)
 
-    def removeListener(self, observer: Callable[[T], Any]):
+    def remove_listener(self, observer: Callable[[T], Any]):
         """Удалить наблюдателя"""
         self.__observers.remove(observer)

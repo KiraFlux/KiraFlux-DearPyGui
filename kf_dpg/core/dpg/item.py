@@ -18,7 +18,7 @@ class DpgItem(Item[DpgTag], ABC):
     def update(self) -> None:
         """Обновить компонент"""
 
-    def _onRegister(self, tag: DpgTag) -> None:
+    def _on_register(self, tag: DpgTag) -> None:
         # if self.isRegistered():
         #     raise ValueError(f"re registering not allowed: {tag} (exist: {self.tag()}")
 

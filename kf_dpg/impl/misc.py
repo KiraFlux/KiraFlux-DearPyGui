@@ -12,7 +12,7 @@ from kf_dpg.core.dpg.widget import DpgWidget
 class Separator(DpgWidget):
     """Dpg: separator"""
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.add_separator(
             parent=parent_tag,
         )
@@ -23,7 +23,7 @@ class Separator(DpgWidget):
 class Spacer(DpgWidget, DpgSizable):
     """Dpg spacer"""
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.add_spacer(
             parent=parent_tag,
         )

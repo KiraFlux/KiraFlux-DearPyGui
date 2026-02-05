@@ -35,7 +35,7 @@ class App:
             y_pos=y,
         )
 
-        Window.registerAll()
+        Window.register_all()
 
         for task in user_tasks:
             task.start()
@@ -50,41 +50,41 @@ class App:
         dpg.destroy_context()
 
     @staticmethod
-    def setTitle(title: str) -> None:
+    def set_title(title: str) -> None:
         """Установить заголовок окна"""
         dpg.set_viewport_title(title)
 
     @staticmethod
-    def setSize(width: int, height: int) -> None:
+    def set_size(width: int, height: int) -> None:
         """Установить размер окна"""
         dpg.set_viewport_width(width)
         dpg.set_viewport_height(height)
 
     @classmethod
-    def getSize(cls) -> tuple[int, int]:
+    def get_size(cls) -> tuple[int, int]:
         """Получить размер окна"""
         return (
-            cls.getWidth(),
-            cls.getHeight()
+            cls.get_width(),
+            cls.get_height()
         )
 
     @staticmethod
-    def getWidth() -> int:
+    def get_width() -> int:
         """Получить ширину окна"""
         return dpg.get_viewport_width()
 
     @staticmethod
-    def getHeight() -> int:
+    def get_height() -> int:
         """Получить высоту окна"""
         return dpg.get_viewport_height()
 
     @staticmethod
-    def setPosition(x: float, y: float) -> None:
+    def set_position(x: float, y: float) -> None:
         """Установить позицию окна"""
         dpg.set_viewport_pos([x, y])
 
     @staticmethod
-    def getPosition() -> tuple[float, float]:
+    def get_position() -> tuple[float, float]:
         """Получить позицию окна"""
         x, y = dpg.get_viewport_pos()
         return x, y

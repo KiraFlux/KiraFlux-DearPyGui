@@ -32,14 +32,14 @@ class ColorInput(DpgWidget, DpgValueHandlerable[Color], DpgLabeled, DpgSizable[i
     _tooltip: bool = True
     """Показывать подсказку"""
 
-    def _updateValue(self) -> None:
+    def _update_value(self) -> None:
         """Обновить значение в DPG"""
         dpg.set_value(self.tag(), self._value.toRGBA8888())
 
     def _getValue(self) -> Color:
-        return Color.fromRGBA8888(*super()._getValue())
+        return Color.from_rgba8888(*super()._getValue())
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         """Создать элемент DPG с учетом всех параметров"""
         return dpg.add_color_picker(
             parent=parent_tag,
@@ -72,7 +72,7 @@ class _ValueInput[T](DpgWidget, DpgValueHandlerable[T], DpgWidthAdjustable[int],
 class _TextInput(_ValueInput[str], DpgSizable[int]):
     """Окно текста"""
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.add_input_text(
             parent=parent_tag,
             readonly=self._readonly,
@@ -116,7 +116,7 @@ class _IntInput(_ValueInput[int], DpgIntervaled[int]):
 
     _step_fast: int
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         clamped = (self._interval_min != self._interval_max)
 
         return dpg.add_input_int(
@@ -180,7 +180,7 @@ class _FloatInput(_ValueInput[float], DpgIntervaled[float]):
 
     _step_fast: float
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         clamped = (self._interval_min != self._interval_max)
 
         return dpg.add_input_float(

@@ -17,7 +17,7 @@ class DpgContainer[T: Deletable](DpgWidget, Container[T], ABC):
     _deleted: bool = field(init=False, default=False)
 
     @abstractmethod
-    def _registerItem(self, item: T) -> None:
+    def _register_item(self, item: T) -> None:
         """Регистрация элемента"""
 
     @final
@@ -26,19 +26,19 @@ class DpgContainer[T: Deletable](DpgWidget, Container[T], ABC):
         self._items[item_id] = item
 
         # Подписываемся на удаление элемента
-        item.attachDeleteObserver(self._onItemDeleted)
+        item.attach_delete_observer(self._on_item_deleted)
 
-        if self.isRegistered():
-            self._registerItem(item)
+        if self.is_registered():
+            self._register_item(item)
 
         return self
 
-    def _onItemDeleted(self, item: Deletable) -> None:
+    def _on_item_deleted(self, item: Deletable) -> None:
         if self._deleted:
             return
 
         if id(item) in self._items:
-            item.detachDeleteObserver(self._onItemDeleted)
+            item.detach_delete_observer(self._on_item_deleted)
             del self._items[id(item)]
 
     @final
@@ -49,13 +49,13 @@ class DpgContainer[T: Deletable](DpgWidget, Container[T], ABC):
         self._deleted = True
 
         for item in list(self._items.values()):
-            item.detachDeleteObserver(self._onItemDeleted)
+            item.detach_delete_observer(self._on_item_deleted)
             item.delete()
 
         self._items.clear()
         super().delete()
 
-    def _onRegister(self, tag: DpgTag) -> None:
-        super()._onRegister(tag)
+    def _on_register(self, tag: DpgTag) -> None:
+        super()._on_register(tag)
         for item in self._items.values():
-            self._registerItem(item)
+            self._register_item(item)

@@ -1,14 +1,11 @@
 from abc import ABC
 from dataclasses import dataclass
-from typing import Optional
-from typing import final
+from typing import Optional, final
 
 from dearpygui import dearpygui as dpg
 
 from kf_dpg.core.dpg.item import DpgTag
-from kf_dpg.core.dpg.traits import DpgIntervaled
-from kf_dpg.core.dpg.traits import DpgValueHandlerable
-from kf_dpg.core.dpg.traits import DpgWidthAdjustable
+from kf_dpg.core.dpg.traits import DpgIntervaled, DpgValueHandlerable, DpgWidthAdjustable
 from kf_dpg.core.dpg.widget import DpgWidget
 
 
@@ -28,7 +25,7 @@ class _Slider[T](DpgWidget, DpgValueHandlerable[T], DpgIntervaled[T], DpgWidthAd
 class _IntSlider(_Slider[int]):
     """Dpg: slider_int"""
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         f = "%d"
 
         if self._units:
@@ -68,7 +65,7 @@ class _FloatSlider(_Slider[float]):
     _digits_after_comma: int
     """Цифр после запятой"""
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         f = f"%.{self._digits_after_comma}f"
 
         if self._units:

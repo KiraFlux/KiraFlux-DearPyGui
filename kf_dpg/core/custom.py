@@ -16,17 +16,17 @@ class CustomWidget(Widget[DpgWidget], Deletable, Visibility):
     def __init__(self, base: DpgWidget) -> None:
         self.__base = base
 
-    def detachDeleteObserver(self, f: Callable[[Deletable], Any]) -> None:
-        self.__base.detachDeleteObserver(f)
+    def detach_delete_observer(self, f: Callable[[Deletable], Any]) -> None:
+        self.__base.detach_delete_observer(f)
 
-    def attachDeleteObserver(self, f: Callable[[Deletable], Any]) -> None:
-        self.__base.attachDeleteObserver(f)
+    def attach_delete_observer(self, f: Callable[[Deletable], Any]) -> None:
+        self.__base.attach_delete_observer(f)
 
-    def isVisible(self) -> bool:
-        return self.__base.isVisible()
+    def is_visible(self) -> bool:
+        return self.__base.is_visible()
 
-    def setVisibility(self, is_visible: bool) -> None:
-        self.__base.setVisibility(is_visible)
+    def set_visibility(self, is_visible: bool) -> None:
+        self.__base.set_visibility(is_visible)
 
     def register(self, parent: Widget[DpgWidget]) -> None:
         self.__base.register(parent)
@@ -34,11 +34,11 @@ class CustomWidget(Widget[DpgWidget], Deletable, Visibility):
     def tag(self) -> Optional[DpgTag]:
         return self.__base.tag()
 
-    def setFont(self, font: Font) -> None:
-        self.__base.setFont(font)
+    def set_font(self, font: Font) -> None:
+        self.__base.set_font(font)
 
-    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
-        return self.__base._createTag(parent_tag)
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
+        return self.__base._create_tag(parent_tag)
 
     def delete(self) -> None:
         self.__base.delete()

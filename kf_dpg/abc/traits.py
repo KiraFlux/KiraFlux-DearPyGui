@@ -11,11 +11,11 @@ class Colored(ABC):
     """Обладает цветом"""
 
     @abstractmethod
-    def setColor(self, color: Color) -> None:
+    def set_color(self, color: Color) -> None:
         """Изменить цвет"""
 
     @abstractmethod
-    def getColor(self) -> Color:
+    def get_color(self) -> Color:
         """Получить актуальный цвет"""
 
 
@@ -26,40 +26,40 @@ class Intervaled[T](ABC):
     """Диапазон значений"""
 
     @abstractmethod
-    def getIntervalMax(self) -> T:
+    def get_interval_max(self) -> T:
         """Получить максимальное допустимое значение"""
 
     @abstractmethod
-    def setIntervalMax(self, new_max: T) -> None:
+    def set_interval_max(self, new_max: T) -> None:
         """Установить минимальное допустимое значение"""
 
     @abstractmethod
-    def getIntervalMin(self) -> T:
+    def get_interval_min(self) -> T:
         """Получить минимальное допустимое значение"""
 
     @abstractmethod
-    def setIntervalMin(self, new_min: T) -> None:
+    def set_interval_min(self, new_min: T) -> None:
         """Установить минимальное допустимое значение"""
 
     @final
-    def getInterval(self) -> Interval:
+    def get_interval(self) -> Interval:
         """Получить диапазона"""
         return (
-            self.getIntervalMin(),
-            self.getIntervalMax()
+            self.get_interval_min(),
+            self.get_interval_max()
         )
 
     @final
-    def setInterval(self, interval: Interval) -> None:
+    def set_interval(self, interval: Interval) -> None:
         """Установить диапазон"""
         new_min, new_max = interval
-        self.setIntervalMin(new_min)
-        self.setIntervalMax(new_max)
+        self.set_interval_min(new_min)
+        self.set_interval_max(new_max)
 
     @final
-    def withInterval(self, interval: Interval) -> Self:
+    def with_interval(self, interval: Interval) -> Self:
         """Установить интервал и вернуть себя"""
-        self.setInterval(interval)
+        self.set_interval(interval)
         return self
 
 
@@ -67,17 +67,17 @@ class Valued[T](ABC):
     """Обладает значением"""
 
     @abstractmethod
-    def getValue(self) -> T:
+    def get_value(self) -> T:
         """Получить актуальное значение"""
 
     @abstractmethod
-    def setValue(self, value: T) -> None:
+    def set_value(self, value: T) -> None:
         """Установить значение"""
 
     @final
-    def withValue(self, value: T) -> Self:
+    def with_value(self, value: T) -> Self:
         """Установить значение и вернуть себя"""
-        self.setValue(value)
+        self.set_value(value)
         return self
 
 
@@ -85,17 +85,17 @@ class WidthAdjustable[T: (int, float)](ABC):
     """Обладает шириной"""
 
     @abstractmethod
-    def getWidth(self) -> T:
+    def get_width(self) -> T:
         """Получить актуальную ширину"""
 
     @abstractmethod
-    def setWidth(self, width: T) -> None:
+    def set_width(self, width: T) -> None:
         """Установить ширину"""
 
     @final
-    def withWidth(self, width: T) -> Self:
+    def with_width(self, width: T) -> Self:
         """Установить ширину и вернуть"""
-        self.setWidth(width)
+        self.set_width(width)
         return self
 
 
@@ -103,17 +103,17 @@ class HeightAdjustable[T: (int, float)](ABC):
     """Обладает высотой"""
 
     @abstractmethod
-    def getHeight(self) -> T:
+    def get_height(self) -> T:
         """Получить актуальную высоту"""
 
     @abstractmethod
-    def setHeight(self, height: T) -> None:
+    def set_height(self, height: T) -> None:
         """Установить ширину"""
 
     @final
-    def withHeight(self, height: T) -> Self:
+    def with_height(self, height: T) -> Self:
         """Установить ширину и вернуть себя"""
-        self.setHeight(height)
+        self.set_height(height)
         return self
 
 
@@ -121,23 +121,23 @@ class Sizable[T: (int, float)](HeightAdjustable, WidthAdjustable, ABC):
     """Обладает размерами (шириной и высотой)"""
 
     @final
-    def getSize(self) -> Vector2D[T]:
+    def get_size(self) -> Vector2D[T]:
         """Получить актуальный размер"""
         return Vector2D(
-            self.getWidth(),
-            self.getHeight()
+            self.get_width(),
+            self.get_height()
         )
 
     @final
-    def setSize(self, size: Vector2D[T]) -> None:
+    def set_size(self, size: Vector2D[T]) -> None:
         """Установить размер"""
-        self.setWidth(size.x)
-        self.setHeight(size.y)
+        self.set_width(size.x)
+        self.set_height(size.y)
 
     @final
-    def withSize(self, size: Vector2D[T]) -> Self:
+    def with_size(self, size: Vector2D[T]) -> Self:
         """Установить размер и вернуть себя"""
-        self.setSize(size)
+        self.set_size(size)
         return self
 
 
@@ -145,55 +145,55 @@ class Toggleable(ABC):
     """Обладает свойством включения и выключения"""
 
     @abstractmethod
-    def setEnabled(self, enabled: bool) -> None:
+    def set_enabled(self, enabled: bool) -> None:
         """Установить включенность объекта"""
 
     @abstractmethod
-    def isEnabled(self) -> bool:
+    def is_enabled(self) -> bool:
         """Включен объект"""
 
     @final
     def enable(self) -> None:
         """Включить"""
-        self.setEnabled(True)
+        self.set_enabled(True)
 
     @final
     def disable(self) -> None:
         """Отключить"""
-        self.setEnabled(False)
+        self.set_enabled(False)
 
 
 class Visibility(ABC):
     """Обладает способностью быть видимым или скрытым"""
 
     @abstractmethod
-    def setVisibility(self, is_visible: bool) -> None:
+    def set_visibility(self, is_visible: bool) -> None:
         """Установить видимость объекта"""
 
     @abstractmethod
-    def isVisible(self) -> bool:
+    def is_visible(self) -> bool:
         """Объект видимый"""
 
     @final
     def show(self) -> None:
         """Показать"""
-        self.setVisibility(True)
+        self.set_visibility(True)
 
     @final
     def hide(self) -> None:
         """Скрыть"""
-        self.setVisibility(False)
+        self.set_visibility(False)
 
 
 class Deletable(ABC):
     """Обладает возможностью быть удаленным"""
 
     @abstractmethod
-    def attachDeleteObserver(self, f: Callable[[Deletable], Any]) -> None:
+    def attach_delete_observer(self, f: Callable[[Deletable], Any]) -> None:
         """Добавить наблюдатель при удалении объекта"""
 
     @abstractmethod
-    def detachDeleteObserver(self, f: Callable[[Deletable], Any]) -> None:
+    def detach_delete_observer(self, f: Callable[[Deletable], Any]) -> None:
         """Удалить наблюдателя при удалении объекта"""
 
     @abstractmethod
@@ -205,13 +205,13 @@ class Handlerable[F: Callable](ABC):
     """Обладает обработчиком"""
 
     @abstractmethod
-    def setHandler(self, f: Optional[F]) -> None:
+    def set_handler(self, f: Optional[F]) -> None:
         """Установить обработчик обратного вызова"""
 
     @final
-    def withHandler(self, f: Optional[F]) -> Self:
+    def with_handler(self, f: Optional[F]) -> Self:
         """Установить обработчик обратного вызова и вернуть себя"""
-        self.setHandler(f)
+        self.set_handler(f)
         return self
 
 
@@ -219,15 +219,15 @@ class Labeled(ABC):
     """Обладаем меткой (label)"""
 
     @abstractmethod
-    def setLabel(self, label: Optional[str]) -> None:
+    def set_label(self, label: Optional[str]) -> None:
         """Установить метку объекта"""
 
     @abstractmethod
-    def getLabel(self) -> Optional[str]:
+    def get_label(self) -> Optional[str]:
         """Получить текущую метку объекта"""
 
     @final
-    def withLabel(self, label: Optional[str]) -> Self:
+    def with_label(self, label: Optional[str]) -> Self:
         """Установить метку объекта и вернуть текущий экземпляр"""
-        self.setLabel(label)
+        self.set_label(label)
         return self
