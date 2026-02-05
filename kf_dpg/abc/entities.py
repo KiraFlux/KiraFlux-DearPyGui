@@ -45,7 +45,7 @@ class Widget[T](Item[T], ABC):
         """Установить шрифт"""
 
     @final
-    def withFont(self, font: Font) -> Self:
+    def with_font(self, font: Font) -> Self:
         """Установить шрифт и вернуть себя"""
         self.set_font(font)
         return self

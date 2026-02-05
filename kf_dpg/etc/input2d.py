@@ -165,7 +165,8 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
     def set_value(self, value: Vector2D[float]) -> None:
         self._x.set_value(value.x)
         self._y.set_value(value.y)
-        self._on_change(value)
+        if self._on_change:
+            self._on_change(value)
 
     def get_value(self) -> Vector2D[float]:
         return Vector2D(
