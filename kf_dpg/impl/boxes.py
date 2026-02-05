@@ -100,6 +100,7 @@ def TextDisplay(
 ):
     """Создать окно вывода текста"""
     return _TextInput(
+        _label=label,
         _readonly=True,
         _on_enter=False,
         _value=default,
@@ -154,11 +155,74 @@ def IntInput(
 
 
 def IntDisplay(
-        *,
         default: int = 0,
 ):
     """Окно вывода целого числа"""
     return _IntInput(
+        _interval_max=0,
+        _interval_min=0,
+
+        _value=default,
+        _readonly=True,
+        _on_enter=False,
+
+        _step=0,
+        _step_fast=0
+    )
+
+
+@final
+@dataclass(kw_only=True)
+class _FloatInput(_ValueInput[float], DpgIntervaled[float]):
+    """Окно целого числа"""
+
+    _step: float
+
+    _step_fast: float
+
+    def _createTag(self, parent_tag: DpgTag) -> DpgTag:
+        clamped = (self._interval_min != self._interval_max)
+
+        return dpg.add_input_float(
+            parent=parent_tag,
+
+            label=self._label,
+            readonly=self._readonly,
+
+            step_fast=self._step_fast,
+            step=self._step,
+
+            min_clamped=clamped,
+            max_clamped=clamped,
+        )
+
+
+def FloatInput(
+        default: float = 0,
+        *,
+        step: float = 0.1,
+        step_fast: float = 1.0,
+        interval_min: float = 0,
+        interval_max: float = 0,
+        on_enter: bool = False,
+):
+    """Окно ввода целого числа"""
+    return _FloatInput(
+        _interval_max=interval_max,
+        _interval_min=interval_min,
+        _value=default,
+        _readonly=False,
+        _on_enter=on_enter,
+        _step=step,
+        _step_fast=step_fast,
+    )
+
+
+def FloatDisplay(
+        default: float = 0,
+):
+    """Окно вывода целого числа"""
+    return _FloatInput(
         _interval_max=0,
         _interval_min=0,
 
