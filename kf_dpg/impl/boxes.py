@@ -72,11 +72,14 @@ class _ValueInput[T](DpgWidget, DpgValueHandlerable[T], DpgWidthAdjustable[int],
 class _TextInput(_ValueInput[str], DpgSizable[int]):
     """Окно текста"""
 
+    _multiline: bool
+
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.add_input_text(
             parent=parent_tag,
             readonly=self._readonly,
             on_enter=self._on_enter,
+            multiline=self._multiline
         )
 
 
@@ -84,12 +87,14 @@ def TextInput(
         *,
         default: str = None,
         on_enter: bool = False,
+        multiline: bool = False,
 ):
     """Создать окно ввода текста"""
     return _TextInput(
         _readonly=False,
         _on_enter=on_enter,
         _value=default,
+        _multiline=multiline,
     )
 
 
