@@ -14,7 +14,7 @@ from kf_dpg.misc.vector import Vector2D
 
 @final
 @dataclass(kw_only=True)
-class LineSeries(DpgWidget, DpgColored, DpgLabeled, DpgValued[tuple[list[float], list[float]]], DpgHasThickness[float], DpgDeletable, DpgVisibility):
+class LineSeries(DpgWidget, DpgLabeled, DpgValued[tuple[list[float], list[float]]], DpgDeletable, DpgVisibility):
     """Линейная серия данных"""
 
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
@@ -65,28 +65,9 @@ class _PlotAxis(DpgWidget, DpgLabeled, DpgDeletable):
     """Ось графика"""
 
     _axis_type: int
-    _min_limit: float = 0.0
-    _max_limit: float = 1.0
-
-    def set_limits(self, min_val: float, max_val: float) -> None:
-        self._min_limit = min_val
-        self._max_limit = max_val
-        if self.is_registered():
-            dpg.set_axis_limits(self.tag(), min_val, max_val)
-
-    def get_limits(self) -> tuple[float, float]:
-        if self.is_registered():
-            _min, _max = dpg.get_axis_limits(self.tag())
-            return _min, _max
-        return self._min_limit, self._max_limit
 
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.add_plot_axis(self._axis_type, parent=parent_tag)
-
-    def update(self) -> None:
-        super().update()
-        if self.is_registered():
-            dpg.set_axis_limits(self.tag(), self._min_limit, self._max_limit)
 
 
 @final
@@ -94,7 +75,6 @@ class _PlotAxis(DpgWidget, DpgLabeled, DpgDeletable):
 class _Plot(DpgContainer, DpgSizable[int], DpgLabeled, DpgDeletable):
     """Декартов график"""
 
-    _x_axis: _PlotAxis
     _y_axis: _PlotAxis
 
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
@@ -106,14 +86,14 @@ class _Plot(DpgContainer, DpgSizable[int], DpgLabeled, DpgDeletable):
     def _register_item(self, item: DpgDeletable) -> None:
         if isinstance(item, LineSeries):
             item.register(self._y_axis)
-        elif isinstance(item, (DragLine, DragPoint)):
+        elif isinstance(item, (DragLine, DragPoint, _PlotAxis)):
             item.register(self)
         else:
             raise TypeError(f"Неподдерживаемый элемент: {type(item)}")
 
 
 def Plot() -> _Plot:
-    return _Plot(
-        _x_axis=_PlotAxis(_axis_type=dpg.mvXAxis).with_label("X"),
-        _y_axis=_PlotAxis(_axis_type=dpg.mvYAxis).with_label("Y"),
-    )
+    plot = _Plot(_y_axis=_PlotAxis(_axis_type=dpg.mvYAxis).with_label("Y"))
+    plot.add(_PlotAxis(_axis_type=dpg.mvXAxis).with_label("X"))
+    plot.add(plot._y_axis)
+    return plot
