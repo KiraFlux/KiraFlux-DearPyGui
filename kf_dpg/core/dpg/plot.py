@@ -53,10 +53,8 @@ class DragPoint(DpgWidget, DpgColored, DpgLabeled, DpgValueHandlerable[Vector2D[
 
     def _update_value(self):
         if self.is_registered():
-            current = super()._get_value()  # (x, y, x_radius, y_radius)
             v = self._value  # Vector2D
-            new_value = (v.x, v.y, current[2], current[3])
-            dpg.set_value(self.tag(), new_value)
+            dpg.set_value(self.tag(), (v.x, v.y))
 
 
 @final
