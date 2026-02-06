@@ -9,7 +9,7 @@ class Subject[T]:
 
     def notify(self, value: T) -> None:
         """Уведомить наблюдателей"""
-        for observer in self.__observers:
+        for observer in tuple(self.__observers):
             observer(value)
 
     def add_listener(self, observer: Callable[[T], Any]) -> None:
