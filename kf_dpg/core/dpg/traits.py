@@ -218,6 +218,30 @@ class DpgIntervaled[T](DpgItem, Intervaled[T]):
 
 
 @dataclass(kw_only=True)
+class DpgHasThickness[T](DpgItem):
+    """Поддерживает толщину"""
+
+    _thickness: T = 2
+
+    @final
+    def set_thickness(self, thickness: float) -> None:
+        self._thickness = thickness
+        self._update_thickness()
+
+    def _update_thickness(self):
+        if self.is_registered():
+            dpg.configure_item(self.tag(), thickness=self._thickness)
+
+    @final
+    def get_thickness(self) -> float:
+        return self._thickness
+
+    def update(self) -> None:
+        super().update()
+        self._update_thickness()
+
+
+@dataclass(kw_only=True)
 class _DpgHandlerable[F: Callable](DpgItem, Handlerable[F], ABC):
     _callback: Optional[F] = None
     """Обработчик обратного вызова"""
