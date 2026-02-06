@@ -7,13 +7,14 @@ import dearpygui.dearpygui as dpg
 
 from kf_dpg.core.dpg.container import DpgContainer
 from kf_dpg.core.dpg.item import DpgTag
-from kf_dpg.core.dpg.traits import DpgColored, DpgLabeled, DpgSizable, DpgValueHandlerable, DpgValued, DpgHasThickness
+from kf_dpg.core.dpg.traits import DpgColored, DpgLabeled, DpgSizable, DpgValueHandlerable, DpgValued, DpgHasThickness, DpgDeletable, DpgVisibility
 from kf_dpg.core.dpg.widget import DpgWidget
+from kf_dpg.misc.vector import Vector2D
 
 
 @final
 @dataclass(kw_only=True)
-class LineSeries(DpgWidget, DpgColored, DpgLabeled, DpgValued[tuple[list[float], list[float]]], DpgHasThickness[float]):
+class LineSeries(DpgWidget, DpgColored, DpgLabeled, DpgValued[tuple[list[float], list[float]]], DpgHasThickness[float], DpgDeletable, DpgVisibility):
     """Линейная серия данных"""
 
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
@@ -23,22 +24,44 @@ class LineSeries(DpgWidget, DpgColored, DpgLabeled, DpgValued[tuple[list[float],
 
 @final
 @dataclass(kw_only=True)
-class DragLine(DpgWidget, DpgColored, DpgLabeled, DpgValueHandlerable[float], DpgHasThickness[float]):
+class DragLine(DpgWidget, DpgColored, DpgLabeled, DpgValueHandlerable[float], DpgHasThickness[float], DpgDeletable, DpgVisibility):
     """Перетаскиваемая линия"""
 
-    _horizontal: bool
+    _vertical: bool
 
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.add_drag_line(
-            axis=dpg.mvXAxis if self._horizontal else dpg.mvYAxis,
-            default_value=self._value,
-            parent=parent_tag
+            parent=parent_tag,
+            vertical=self._vertical
         )
 
 
 @final
 @dataclass(kw_only=True)
-class _PlotAxis(DpgWidget, DpgLabeled):
+class DragPoint(DpgWidget, DpgColored, DpgLabeled, DpgValueHandlerable[Vector2D[float]], DpgDeletable, DpgVisibility):
+    """Перетаскиваемая точка"""
+
+    def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
+        return dpg.add_drag_point(
+            parent=parent_tag,
+            default_value=self._value.toTuple()
+        )
+
+    def _get_value(self) -> Vector2D[float]:
+        x, y, *_ = super()._get_value()
+        return Vector2D(x, y)
+
+    def _update_value(self):
+        if self.is_registered():
+            current = super()._get_value()  # (x, y, x_radius, y_radius)
+            v = self._value  # Vector2D
+            new_value = (v.x, v.y, current[2], current[3])
+            dpg.set_value(self.tag(), new_value)
+
+
+@final
+@dataclass(kw_only=True)
+class _PlotAxis(DpgWidget, DpgLabeled, DpgDeletable):
     """Ось графика"""
 
     _axis_type: int
@@ -68,63 +91,29 @@ class _PlotAxis(DpgWidget, DpgLabeled):
 
 @final
 @dataclass(kw_only=True)
-class _Plot(DpgContainer, DpgSizable[int], DpgLabeled):
+class _Plot(DpgContainer, DpgSizable[int], DpgLabeled, DpgDeletable):
     """Декартов график"""
 
     _x_axis: _PlotAxis
     _y_axis: _PlotAxis
 
-    _show_legend: bool
-    _show_grid: bool
-
-    def enable_legend(self, enabled: bool) -> None:
-        self._show_legend = enabled
-        self._update_legend_visibility()
-
-    def is_legend_enabled(self) -> bool:
-        return self._show_legend
-
-    def enable_grid(self, enabled: bool) -> None:
-        self._show_grid = enabled
-        self._update_grid_visibility()
-
-    def is_grid_enabled(self) -> bool:
-        return self._show_grid
-
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
-        return dpg.add_plot(parent=parent_tag)
+        return dpg.add_plot(
+            parent=parent_tag,
+            equal_aspects=True,
+        )
 
-    def _register_item(self, item) -> None:
+    def _register_item(self, item: DpgDeletable) -> None:
         if isinstance(item, LineSeries):
-            if not self._y_axis:
-                self.add_y_axis()
             item.register(self._y_axis)
-        elif isinstance(item, DragLine):
+        elif isinstance(item, (DragLine, DragPoint)):
             item.register(self)
         else:
             raise TypeError(f"Неподдерживаемый элемент: {type(item)}")
 
-    def update(self) -> None:
-        super().update()
-        self._update_legend_visibility()
-        self._update_grid_visibility()
 
-    def _update_grid_visibility(self):
-        if self.is_registered():
-            dpg.configure_item(self.tag(), show_grid=self._show_grid)
-
-    def _update_legend_visibility(self):
-        if self.is_registered():
-            dpg.configure_item(self.tag(), show_legend=self._show_legend)
-
-
-def Plot(
-        show_legend: bool = False,
-        show_grid: bool = False,
-) -> _Plot:
+def Plot() -> _Plot:
     return _Plot(
         _x_axis=_PlotAxis(_axis_type=dpg.mvXAxis).with_label("X"),
         _y_axis=_PlotAxis(_axis_type=dpg.mvYAxis).with_label("Y"),
-        _show_legend=show_legend,
-        _show_grid=show_grid,
     )

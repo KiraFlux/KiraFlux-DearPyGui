@@ -24,7 +24,7 @@ class DpgWidget(Widget[DpgTag], DpgDeletable, DpgVisibility, ABC):
 
     def _on_register(self, tag: DpgTag) -> None:
         super()._on_register(tag)
-        self._updateVisibility()
+        self._update_visibility()
 
         if self.__font is not None:
             self._update_font()

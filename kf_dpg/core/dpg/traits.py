@@ -114,7 +114,7 @@ class DpgVisibility(DpgItem, Visibility):
     _visible: bool = True
     """Объект видимый"""
 
-    def _updateVisibility(self) -> None:
+    def _update_visibility(self) -> None:
         if self._visible:
             dpg.show_item(self.tag())
         else:
@@ -122,7 +122,7 @@ class DpgVisibility(DpgItem, Visibility):
 
     def update(self) -> None:
         super().update()
-        self._updateVisibility()
+        self._update_visibility()
 
     @final
     def is_visible(self) -> bool:
@@ -136,7 +136,7 @@ class DpgVisibility(DpgItem, Visibility):
         self._visible = is_visible
 
         if self.is_registered():
-            self._updateVisibility()
+            self._update_visibility()
 
 
 @dataclass(kw_only=True)
@@ -149,7 +149,7 @@ class DpgValued[T](DpgItem, Valued[T], ABC):
     def _update_value(self):
         dpg.set_value(self.tag(), self._value)
 
-    def _getValue(self) -> T:
+    def _get_value(self) -> T:
         return dpg.get_value(self.tag())
 
     def update(self) -> None:
@@ -159,7 +159,7 @@ class DpgValued[T](DpgItem, Valued[T], ABC):
     @final
     def get_value(self) -> T:
         if self.is_registered():
-            self._value = self._getValue()
+            self._value = self._get_value()
 
         return self._value
 
@@ -235,6 +235,11 @@ class DpgHasThickness[T](DpgItem):
     @final
     def get_thickness(self) -> float:
         return self._thickness
+
+    @final
+    def with_thickness(self, thickness: float):
+        self.set_thickness(thickness)
+        return self
 
     def update(self) -> None:
         super().update()

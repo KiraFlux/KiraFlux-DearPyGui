@@ -36,8 +36,8 @@ class ColorInput(DpgWidget, DpgValueHandlerable[Color], DpgLabeled, DpgSizable[i
         """Обновить значение в DPG"""
         dpg.set_value(self.tag(), self._value.toRGBA8888())
 
-    def _getValue(self) -> Color:
-        return Color.from_rgba8888(*super()._getValue())
+    def _get_value(self) -> Color:
+        return Color.from_rgba8888(*super()._get_value())
 
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         """Создать элемент DPG с учетом всех параметров"""

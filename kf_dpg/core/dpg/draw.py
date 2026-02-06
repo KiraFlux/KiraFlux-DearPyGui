@@ -16,8 +16,8 @@ from kf_dpg.core.dpg.item import DpgTag
 from kf_dpg.core.dpg.traits import DpgDeletable
 from kf_dpg.core.dpg.traits import DpgHeightAdjustable
 from kf_dpg.core.dpg.traits import DpgVisibility
-from rs.lina.vector import Vector2D
-from rs.misc.color import Color
+from kf_dpg.misc.vector import Vector2D
+from kf_dpg.misc.color import Color
 
 
 class DpgFigure(DpgVisibility, DpgDeletable, Figure, ABC):

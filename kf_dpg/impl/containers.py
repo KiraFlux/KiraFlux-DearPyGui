@@ -80,7 +80,7 @@ class ComboBox[T](DpgWidget, DpgLabeled, DpgWidthAdjustable[int], DpgToggleable,
         if current_str and current_str in self._items_cache:
             dpg.set_value(self.tag(), current_str)
 
-    def _getValue(self) -> T:
+    def _get_value(self) -> T:
         if not self.is_registered():
             return self._current_value
 
