@@ -181,32 +181,32 @@ class DpgIntervaled[T](DpgItem, Intervaled[T]):
     _interval_min: Optional[T]
     """Минимальное допустимое значение"""
 
-    def _updateIntervalMax(self) -> None:
+    def _update_interval_max(self) -> None:
         if self._interval_max:
             self.configure(max_value=self._interval_max)
 
-    def _updateIntervalMin(self) -> None:
+    def _update_interval_min(self) -> None:
         if self._interval_min:
             self.configure(min_value=self._interval_min)
 
     def update(self) -> None:
         super().update()
-        self._updateIntervalMin()
-        self._updateIntervalMax()
+        self._update_interval_min()
+        self._update_interval_max()
 
     @final
     def set_interval_max(self, new_max: T) -> None:
         self._interval_max = new_max
 
         if self.is_registered():
-            self._updateIntervalMax()
+            self._update_interval_max()
 
     @final
     def set_interval_min(self, new_min: T) -> None:
         self._interval_min = new_min
 
         if self.is_registered():
-            self._updateIntervalMin()
+            self._update_interval_min()
 
     @final
     def get_interval_max(self) -> T:
