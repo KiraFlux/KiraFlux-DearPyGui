@@ -19,6 +19,10 @@ from kf_dpg.misc.vector import Vector2D
 class LineSeries(DpgWidget, DpgThemeable, DpgLabeled, DpgValued[tuple[list[float], list[float]]]):
     """Линейная серия данных"""
 
+    @classmethod
+    def make(cls):
+        return cls(_value=(list(), list()))
+
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         x, y = self.get_value()
         return dpg.add_line_series(x, y, parent=parent_tag)
