@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, Callable, ClassVar, Optional, final
+from typing import Any, Callable, ClassVar
+from typing import Optional, final
 
 from dearpygui import dearpygui as dpg
 
-from kf_dpg.abc.traits import Colored, Deletable, Handlerable, HeightAdjustable, Intervaled, Labeled, Sizable, Toggleable, Valued, Visibility, WidthAdjustable
-from kf_dpg.core.dpg.item import DpgItem
+from kf_dpg.abc.traits import Colored, Deletable, Handlerable, HeightAdjustable, Intervaled, Labeled, Sizable, \
+    Toggleable, Valued, Visibility, WidthAdjustable, Themeable
+from kf_dpg.core.dpg.item import DpgItem, DpgTag
 from kf_dpg.misc.color import Color
 from kf_dpg.misc.subject import Subject
 
@@ -353,3 +355,50 @@ class DpgHeightAdjustable[T: (int, float)](DpgItem, HeightAdjustable):
 @dataclass(kw_only=True)
 class DpgSizable[T: (int, float)](DpgWidthAdjustable[T], DpgHeightAdjustable[T], Sizable[T], DpgItem):
     """Виджет DPG имеющий размеры"""
+
+
+@dataclass(kw_only=True)
+class DpgThemeable(DpgItem, Themeable, ABC):
+    """Реализация Themeable для DPG элементов"""
+
+    _theme_tag: Optional[DpgTag] = field(init=False, default=None)
+    _color: Color = field(default_factory=Color.white)
+
+    @final
+    def get_color(self) -> Color:
+        return self._color
+
+    @final
+    def set_color(self, color: Color) -> None:
+        self._color = color
+        self._update_theme()
+
+    def _update_theme(self) -> None:
+        """Обновить или создать тему с цветом"""
+        if not self.is_registered():
+            return
+
+        component = self._get_theme_component()
+        color_target = self._get_color_target()
+        category = self._get_color_category()
+
+        if self._theme_tag is None:
+            # Создаём новую тему
+            with dpg.theme() as theme_id:
+                with dpg.theme_component(component):
+                    dpg.add_theme_color(color_target, self._color.to_rgba8888(), category=category)
+            self._theme_tag = theme_id
+        else:
+            # Находим и обновляем компонент цвета
+            theme_components = dpg.get_item_children(self._theme_tag, slot=1)
+            if theme_components:
+                color_items = dpg.get_item_children(theme_components[0], slot=1)
+                if color_items:
+                    dpg.set_value(color_items[0], self._color.to_rgba8888())
+
+        dpg.bind_item_theme(self.tag(), self._theme_tag)
+
+    def update(self) -> None:
+        super().update()
+        if self.is_registered():
+            self._update_theme()

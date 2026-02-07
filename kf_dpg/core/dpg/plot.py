@@ -7,24 +7,35 @@ import dearpygui.dearpygui as dpg
 
 from kf_dpg.core.dpg.container import DpgContainer
 from kf_dpg.core.dpg.item import DpgTag
-from kf_dpg.core.dpg.traits import DpgColored, DpgLabeled, DpgSizable, DpgValueHandlerable, DpgValued, DpgHasThickness, DpgDeletable, DpgVisibility
+from kf_dpg.core.dpg.traits import DpgColored, DpgLabeled, DpgSizable, DpgValueHandlerable, DpgValued, DpgHasThickness, \
+    DpgDeletable, DpgVisibility, DpgThemeable
 from kf_dpg.core.dpg.widget import DpgWidget
 from kf_dpg.misc.vector import Vector2D
 
 
 @final
 @dataclass(kw_only=True)
-class LineSeries(DpgWidget, DpgLabeled, DpgValued[tuple[list[float], list[float]]], DpgDeletable, DpgVisibility):
+class LineSeries(DpgWidget, DpgThemeable, DpgLabeled, DpgValued[tuple[list[float], list[float]]]):
     """Линейная серия данных"""
 
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         x, y = self.get_value()
         return dpg.add_line_series(x, y, parent=parent_tag)
 
+    def _get_theme_component(self) -> int:
+        return dpg.mvLineSeries
+
+    def _get_color_target(self) -> int:
+        return dpg.mvPlotCol_Line
+
+    def _get_color_category(self) -> int:
+        return dpg.mvThemeCat_Plots
+
 
 @final
 @dataclass(kw_only=True)
-class DragLine(DpgWidget, DpgColored, DpgLabeled, DpgValueHandlerable[float], DpgHasThickness[float], DpgDeletable, DpgVisibility):
+class DragLine(DpgWidget, DpgColored, DpgLabeled, DpgValueHandlerable[float], DpgHasThickness[float], DpgDeletable,
+               DpgVisibility):
     """Перетаскиваемая линия"""
 
     _vertical: bool

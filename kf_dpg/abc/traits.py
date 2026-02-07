@@ -231,3 +231,19 @@ class Labeled(ABC):
         """Установить метку объекта и вернуть текущий экземпляр"""
         self.set_label(label)
         return self
+
+
+class Themeable(Colored, ABC):
+    """Обладает цветом, управляемым через темы DPG"""
+
+    @abstractmethod
+    def _get_theme_component(self) -> int:
+        """Получить компонент темы (dpg.mvLineSeries и т.д.)"""
+
+    @abstractmethod
+    def _get_color_target(self) -> int:
+        """Получить цель цвета (dpg.mvPlotCol_Line и т.д.)"""
+
+    @abstractmethod
+    def _get_color_category(self) -> int:
+        """Получить категорию цвета (dpg.mvThemeCat_Plots и т.д.)"""
