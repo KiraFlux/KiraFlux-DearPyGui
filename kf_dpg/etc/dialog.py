@@ -2,6 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable, Optional, final
 
+import dearpygui.dearpygui as dpg
 from kf_dpg.abc.entities import Widget
 from kf_dpg.abc.traits import Labeled
 from kf_dpg.core.custom import CustomWidget
@@ -26,6 +27,32 @@ class ModalDialog(CustomWidget, Labeled):
 
     def set_label(self, label: Optional[str]) -> None:
         self._window.set_label(label)
+
+    def show(self) -> None:
+        """Показать диалог с центрированием"""
+        super().show()
+        self._center_window()
+
+    def _center_window(self) -> None:
+        """Центрировать окно на экране с учётом реального размера"""
+        if not self._window.is_registered():
+            return
+
+        dpg.split_frame()
+
+        # Получаем реальный размер окна
+        window_width = dpg.get_item_width(self._window.tag())
+        window_height = dpg.get_item_height(self._window.tag())
+
+        # Получаем размеры viewport'а
+        viewport_width = dpg.get_viewport_client_width()
+        viewport_height = dpg.get_viewport_client_height()
+
+        # Вычисляем позицию для центрирования
+        x_pos = (viewport_width - window_width) // 2
+        y_pos = (viewport_height - window_height) // 2
+
+        dpg.set_item_pos(self._window.tag(), [x_pos, y_pos])
 
 
 class ConfirmDialog(ModalDialog):
