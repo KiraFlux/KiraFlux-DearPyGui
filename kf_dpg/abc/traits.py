@@ -18,6 +18,12 @@ class Colored(ABC):
     def get_color(self) -> Color:
         """Получить актуальный цвет"""
 
+    @final
+    def with_color(self, color: Color) -> Self:
+        """С установленным цветом"""
+        self.set_color(color)
+        return self
+
 
 class Intervaled[T](ABC):
     """Обладает интервалом"""
