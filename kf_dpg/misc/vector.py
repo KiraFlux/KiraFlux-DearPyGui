@@ -8,6 +8,9 @@ class Vector2D[T]:
     x: T
     y: T
 
+    def clone(self) -> Vector2D[T]:
+        return Vector2D(self.x, self.y)
+
     def toTuple(self) -> tuple[T, T]:
         """Преобразовать в кортеж"""
         return self.x, self.y
