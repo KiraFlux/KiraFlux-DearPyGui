@@ -1,6 +1,6 @@
-from typing import Callable, Final
+from typing import Callable, Final, Optional
 
-from kf_dpg.abc.traits import Intervaled, Valued
+from kf_dpg.abc.traits import Intervaled, Valued, Handlerable
 from kf_dpg.core.custom import CustomWidget
 from kf_dpg.impl.boxes import IntInput, FloatInput
 from kf_dpg.impl.containers import HBox, VBox
@@ -92,35 +92,21 @@ class IntInput2D(CustomWidget, Valued[Vector2D[int]], Intervaled[int]):
         )
 
 
-class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
+class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float],
+                   Handlerable[Callable[[Vector2D[float]], None]]):
 
     def __init__(
             self,
             label: str,
             interval: tuple[float, float],
             *,
-            on_change: Callable[[Vector2D[float]], None] = None,
             default: Vector2D[int] = Vector2D(0, 0),
-            width: int = 500,
             step: int = 1,
             step_fast: int = 1
     ) -> None:
-
-        self._on_change: Final = on_change
-
-        if on_change is None:
-            _on_change_x = None
-            _on_change_y = None
-        else:
-            def _on_change_x(x):
-                on_change(Vector2D(x, self._y.get_value()))
-
-            def _on_change_y(y):
-                on_change(Vector2D(self._x.get_value(), y))
+        self._on_change: Optional[Callable[[Vector2D[float]], None]] = None
 
         interval_min, interval_max = interval
-
-        item_width = width // 3
 
         self._y = FloatInput(
             default=default.y,
@@ -128,7 +114,7 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
             step_fast=step_fast,
             interval_max=interval_max,
             interval_min=interval_min,
-        ).with_width(item_width).with_handler(_on_change_y)
+        )
 
         self._x = FloatInput(
             default=default.x,
@@ -136,7 +122,7 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
             step_fast=step_fast,
             interval_max=interval_max,
             interval_min=interval_min,
-        ).with_width(item_width).with_handler(_on_change_x)
+        )
 
         super().__init__(
             HBox()
@@ -147,6 +133,22 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
             )
             .add(Text(label))
         )
+
+    def set_handler(self, on_change: Optional[Callable[[Vector2D[float]], None]]) -> None:
+        self._on_change = on_change
+
+        if self._on_change is None:
+            _on_change_x = None
+            _on_change_y = None
+        else:
+            def _on_change_x(x):
+                on_change(Vector2D(x, self._y.get_value()))
+
+            def _on_change_y(y):
+                on_change(Vector2D(self._x.get_value(), y))
+
+        self._x.set_handler(_on_change_x)
+        self._y.set_handler(_on_change_y)
 
     def get_interval_max(self) -> float:
         return self._x.get_interval_max()
@@ -165,11 +167,9 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float]):
     def set_value(self, value: Vector2D[float]) -> None:
         self._x.set_value(value.x)
         self._y.set_value(value.y)
+
         if self._on_change:
             self._on_change(value)
 
     def get_value(self) -> Vector2D[float]:
-        return Vector2D(
-            self._x.get_value(),
-            self._y.get_value()
-        )
+        return Vector2D(self._x.get_value(), self._y.get_value())
