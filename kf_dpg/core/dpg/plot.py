@@ -19,13 +19,31 @@ from kf_dpg.misc.vector import Vector2D
 class LineSeries(DpgWidget, DpgThemeable, DpgLabeled, DpgValued[tuple[list[float], list[float]]]):
     """Линейная серия данных"""
 
+    _loop: bool = False
+
     @classmethod
     def make(cls):
         return cls(_value=(list(), list()))
 
+    def set_loop(self, loop: bool):
+        self._loop = loop
+        self._update_loop()
+
+    def update(self) -> None:
+        super().update()
+        self._update_loop()
+
+    def _update_loop(self):
+        if self.is_registered():
+            self.configure(loop=self._loop)
+
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         x, y = self.get_value()
-        return dpg.add_line_series(x, y, parent=parent_tag)
+        return dpg.add_line_series(
+            x, y,
+            parent=parent_tag,
+            loop=self._loop
+        )
 
     def _get_theme_component(self) -> int:
         return dpg.mvLineSeries
