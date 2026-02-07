@@ -1,6 +1,6 @@
 from typing import Callable, Final, Optional
 
-from kf_dpg.abc.traits import Intervaled, Valued, Handlerable
+from kf_dpg.abc.traits import Intervaled, Valued, Handlerable, Labeled
 from kf_dpg.core.custom import CustomWidget
 from kf_dpg.impl.boxes import IntInput, FloatInput
 from kf_dpg.impl.containers import HBox, VBox
@@ -93,37 +93,30 @@ class IntInput2D(CustomWidget, Valued[Vector2D[int]], Intervaled[int]):
 
 
 class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float],
-                   Handlerable[Callable[[Vector2D[float]], None]]):
+                   Handlerable[Callable[[Vector2D[float]], None]], Labeled):
 
     def __init__(
             self,
-            label: str,
-            interval: tuple[float, float],
             *,
-            default: Vector2D[int] = Vector2D(0, 0),
-            step: int = 1,
-            step_fast: int = 1
+            default: Vector2D[float] = Vector2D(0, 0),
+            step: float = 1,
+            step_fast: float = 1
     ) -> None:
         self._on_change: Optional[Callable[[Vector2D[float]], None]] = None
-
-        interval_min, interval_max = interval
 
         self._y = FloatInput(
             default=default.y,
             step=step,
             step_fast=step_fast,
-            interval_max=interval_max,
-            interval_min=interval_min,
         )
 
         self._x = FloatInput(
             default=default.x,
             step=step,
             step_fast=step_fast,
-            interval_max=interval_max,
-            interval_min=interval_min,
         )
 
+        self._label_text = Text()
         super().__init__(
             HBox()
             .add(
@@ -131,8 +124,14 @@ class FloatInput2D(CustomWidget, Valued[Vector2D[float]], Intervaled[float],
                 .add(self._x)
                 .add(self._y)
             )
-            .add(Text(label))
+            .add(self._label_text)
         )
+
+    def set_label(self, label: Optional[str]) -> None:
+        self._label_text.set_value(label)
+
+    def get_label(self) -> Optional[str]:
+        return self._label_text.get_value()
 
     def set_handler(self, on_change: Optional[Callable[[Vector2D[float]], None]]) -> None:
         self._on_change = on_change
