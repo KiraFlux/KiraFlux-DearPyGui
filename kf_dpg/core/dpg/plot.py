@@ -10,6 +10,7 @@ from kf_dpg.core.dpg.item import DpgTag
 from kf_dpg.core.dpg.traits import DpgColored, DpgLabeled, DpgSizable, DpgValueHandlerable, DpgValued, DpgHasThickness, \
     DpgDeletable, DpgVisibility, DpgThemeable
 from kf_dpg.core.dpg.widget import DpgWidget
+from kf_dpg.misc.color import Color
 from kf_dpg.misc.vector import Vector2D
 
 
@@ -38,12 +39,21 @@ class DragLine(DpgWidget, DpgColored, DpgLabeled, DpgValueHandlerable[float], Dp
                DpgVisibility):
     """Перетаскиваемая линия"""
 
+    @classmethod
+    def make(cls, *, is_vertical: bool, value: float = 0, color: Color = Color.white()):
+        return DragLine(
+            _value=value,
+            _color=color,
+            _vertical=is_vertical,
+        )
+
     _vertical: bool
 
     def _create_tag(self, parent_tag: DpgTag) -> DpgTag:
         return dpg.add_drag_line(
             parent=parent_tag,
-            vertical=self._vertical
+            vertical=self._vertical,
+            delayed=True,
         )
 
 
