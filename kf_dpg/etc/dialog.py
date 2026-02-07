@@ -106,7 +106,6 @@ class EditDialog[T](ModalDialog, ABC):
         if self.__value is not None:
             self.apply(self.__value)
 
-    @abstractmethod
     def apply(self, value: T) -> None:
         """Применить изменения"""
 
