@@ -124,12 +124,9 @@ class ComboBox[T](DpgWidget, DpgLabeled, DpgWidthAdjustable[int], DpgToggleable,
 
 
 @final
-@dataclass
+@dataclass(kw_only=True)
 class Tab(_DpgWidgetContainer, DpgLabeled):
     """Dpg: tab"""
-
-    _label: str
-    """Наименование вкладки"""
 
     _closable: bool = False
     """Вкладка может быть закрыта"""

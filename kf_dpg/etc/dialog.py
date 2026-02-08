@@ -4,7 +4,7 @@ from typing import Callable, Optional, final
 
 import dearpygui.dearpygui as dpg
 from kf_dpg.abc.entities import Widget
-from kf_dpg.abc.traits import Labeled
+from kf_dpg.abc.traits import Labeled, Sizable
 from kf_dpg.core.custom import CustomWidget
 from kf_dpg.impl.buttons import Button
 from kf_dpg.impl.containers import VBox, Window
@@ -12,12 +12,23 @@ from kf_dpg.impl.misc import Separator, Spacer
 from kf_dpg.impl.text import Text
 
 
-class ModalDialog(CustomWidget, Labeled):
+class ModalDialog(CustomWidget, Labeled, Sizable):
     """Модальный диалог"""
+
+    def get_height(self) -> int:
+        return self._window.get_height()
+
+    def set_height(self, height: int) -> None:
+        self._window.set_height(height)
+
+    def get_width(self) -> int:
+        return self._window.get_width()
+
+    def set_width(self, width: int) -> None:
+        self._window.set_width(width)
 
     def __init__(self):
         self._window = Window(
-            _auto_size=True,
             _modal=True,
         )
         super().__init__(self._window)
